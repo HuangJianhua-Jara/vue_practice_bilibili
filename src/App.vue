@@ -1,21 +1,24 @@
 <template>
   <div id="app">
     <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <h2>熊宝的花花</h2>
+    <Student></Student>
+    <School></School>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import School from './components/School.vue'
+import Student from './components/Student.vue'
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    School,
+    Student
   }
 }
 </script>
-
 <style>
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
@@ -26,3 +29,5 @@ export default {
   margin-top: 60px;
 }
 </style>
+
+
