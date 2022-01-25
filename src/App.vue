@@ -3,7 +3,7 @@
     <div class="todo-container">
       <div class=".todo-wrap">
         <h3>熊宝的花花 to-do-list 案例</h3>
-        <MyHeader :addTodo="addTodo"></MyHeader>
+        <MyHeader @addTodo="addTodo"></MyHeader>
         <MyList
           :todos="todos"
           :checkTodo="checkTodo"
@@ -11,8 +11,8 @@
         />
         <MyFooter
           :todos="todos"
-          :checkAllTodo="checkAllTodo"
-          :clearAllTodo="clearAllTodo"
+          @checkAllTodo="checkAllTodo"
+          @clearAllTodo="clearAllTodo"
         ></MyFooter>
       </div>
     </div>
@@ -31,12 +31,21 @@ export default {
   },
   data() {
     return {
-      todos: [
-        { id: "001", title: "吃饭饭", done: false },
-        { id: "002", title: "吃果果", done: false },
-        { id: "003", title: "涂香香", done: false },
-      ],
+      // todos: [
+      //   { id: "001", title: "吃饭饭", done: false },
+      //   { id: "002", title: "吃果果", done: false },
+      //   { id: "003", title: "涂香香", done: false },
+      // ],
+      todos: JSON.parse(localStorage.getItem("todos")) || [],
     };
+  },
+  watch: {
+    todos: {
+      deep: true,
+      handler(value) {
+        localStorage.setItem("todos", JSON.stringify(value));
+      },
+    },
   },
   methods: {
     // 添加一个todo
@@ -69,6 +78,14 @@ export default {
       });
     },
   },
+  mounted() {
+    this.$bus.$on("checkTodo", this.checkTodo);
+    this.$bus.$on("deleteTodo", this.deleteTodo);
+  },
+  beforeDestroy() {
+    this.$bus.off("checkTodo");
+    this.$bus.off("deleteTodo");
+  },
 };
 </script>
 
@@ -95,9 +112,18 @@ body {
   background-color: #da4f49;
   border: 1px solid #bd362f;
 }
+.btn-edit {
+  color: #fff;
+  background-color: #b849da;
+  border: 1px solid #aa48e2;
+}
 .btn-danger:hover {
   color: #fff;
   background-color: #bd362f;
+}
+.btn-edit:hover {
+  color: #fff;
+  background-color: rgb(140, 45, 184);
 }
 .btn:focus {
   outline: none;

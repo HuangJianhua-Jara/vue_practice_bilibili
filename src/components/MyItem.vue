@@ -6,30 +6,46 @@
         :checked="todoObj.done"
         @change="handleCheck(todoObj.id)"
       />
-      <span>{{ todoObj.title }}</span>
+      <span v-show="!todoObj.isEdit">{{ todoObj.title }}</span>
+      <input
+        v-show="todoObj.isEdit"
+        type="text"
+        :value="todoObj.title"
+        @blur="handleBlur(todoObj)"
+      />
     </label>
     <button class="btn btn-danger" @click="handleDelete(todoObj.id)">
       删除
     </button>
+    <button class="btn btn-edit" @click="handleEdit(todoObj)">编辑</button>
   </li>
 </template>
 
 <script>
 export default {
   name: "MyItem",
-  props: ["todoObj", "checkTodo", "deleteTodo"],
+  props: ["todoObj"],
   methods: {
     // 勾选
     handleCheck(id) {
       // 通知App组件将对应的todo对象值取反
-      this.checkTodo(id);
+      // this.checkTodo(id);
+      this.$bus.$emit("checkTodo", id);
     },
     // 删除
     handleDelete(id) {
       //   if (confirm("确定删除吗？")) {
 
       //   }
-      this.deleteTodo(id);
+      // this.deleteTodo(id);
+      this.$bus.$emit("deleteTodo", id);
+    },
+    handleEdit(todo) {
+      this.$set(todo, "isEdit", true);
+      console.log(todo);
+    },
+    handleBlur(todo) {
+      todo.isEdit = false;
     },
   },
 };
@@ -61,6 +77,7 @@ li button {
   float: right;
   display: none;
   margin-top: 3px;
+  margin-right: 5px;
 }
 
 li:before {

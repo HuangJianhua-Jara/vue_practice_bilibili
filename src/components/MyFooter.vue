@@ -2,7 +2,7 @@
   <div class="todo-footer" v-show="total">
     <label>
       <!-- <input type="checkbox" :checked="isAll" @change="checkAll"/> -->
-      <input type="checkbox" :checked="isAll" @change="checkAll" />
+      <input type="checkbox" :checked="isAll" @change="isAll" />
     </label>
     <span>
       <span>已完成{{ doneTotal }}</span> / 全部 {{ total }}
@@ -14,7 +14,7 @@
 <script>
 export default {
   name: "MyFooter",
-  props: ["todos", "checkAllTodo", "clearAllTodo"],
+  props: ["todos"],
   computed: {
     total() {
       return this.todos.length;
@@ -30,17 +30,25 @@ export default {
       // 统计 功能
       return this.todos.reduce((pre, todo) => pre + (todo.done ? 1 : 0), 0);
     },
-    isAll() {
-      return this.doneTotal === this.total && this.total > 0;
+    isAll: {
+      // 全选框是否勾选
+      get() {
+        return this.doneTotal === this.total && this.total > 0;
+      },
+      // isAll 被修改时set 被调用
+      set(value) {
+        // this.checkAllTodo(value)
+        this.$emit("checkAllTodo", value);
+      },
     },
   },
   methods: {
-    checkAll(e) {
-      //   console.log(e.target.checked); // e.target.checked 布尔值
-      this.checkAllTodo(e.target.checked);
-    },
+    // checkAll(e) {
+    //   //   console.log(e.target.checked); // e.target.checked 布尔值
+    //   this.checkAllTodo(e.target.checked);
+    // },
     clearAll() {
-      this.clearAllTodo();
+      this.$emit("clearAllTodo");
     },
   },
 };

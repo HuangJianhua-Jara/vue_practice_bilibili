@@ -13,7 +13,7 @@
 import { nanoid } from "nanoid";
 export default {
   name: "MyHeader",
-  props: ["addTodo"], // 通过props 从App.vue 传到子组件
+  // props: ["addTodo"], // 通过props 从App.vue 传到子组件
   data() {
     return {
       title: "",
@@ -26,7 +26,8 @@ export default {
       const todo = { id: nanoid(), title: e.target.value, done: false };
       console.log(todo);
       // 通知App组件去添加一个todo对象
-      this.addTodo(todo);
+      // this.addTodo(todo);
+      this.$emit("addTodo", todo);
       // 清空
       e.target.value = "";
     },
